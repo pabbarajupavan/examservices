@@ -1,5 +1,7 @@
 package com.quest.examservices.model;
 
+import java.sql.Timestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,5 +23,9 @@ public class User {
     private String email ;
     private String role ;
     private Long contact ;
+    private Timestamp creationTime ;
+    private Timestamp lastUpdateDate ;
+    private String createdBy ;
+    private String lastUpdatedBy ;
     
 }
