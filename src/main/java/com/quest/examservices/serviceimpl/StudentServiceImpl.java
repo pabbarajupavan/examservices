@@ -1,7 +1,8 @@
 package com.quest.examservices.serviceimpl;
 
-import java.sql.Timestamp;import java.util.ArrayList;
-import java.util.List;
+
+import java.sql.Timestamp;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.quest.examservices.model.Student;
 import com.quest.examservices.pojo.StudentAccessRequest;
 import com.quest.examservices.pojo.StudentAccessRequests;
-import com.quest.examservices.pojo.StudentAccessResponse;
 import com.quest.examservices.repository.StudentRepository;
 import com.quest.examservices.service.StudentService;
 
@@ -19,13 +19,11 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository ;
 
-    private List<StudentAccessResponse> responseList = null;
-    private StudentAccessResponse response ;
-
+   
     @Override
-    public List<StudentAccessResponse> saveStudent(StudentAccessRequests requests) {
+    public String saveStudent(StudentAccessRequests requests) {
         // TODO Auto-generated method stub
-        responseList = new ArrayList<>() ;
+        String  response = null ;
         try {
             long creationTime = System.currentTimeMillis() ;
             Timestamp creTimestamp = new Timestamp(creationTime) ;
@@ -43,24 +41,20 @@ public class StudentServiceImpl implements StudentService {
                 student.setLastUpdatedBy(userName);
                 student.setLastUpdateDate(creTimestamp);
                 student = studentRepository.save(student) ;
+                System.out.println("student" +student.getFirstName());
                 if (student != null) {
-                    response.setFirstName(student.getFirstName());
-                    response.setLastName(student.getLastName());
-                    response.setRollNumber(student.getRollNumber());
-                    response.setStudentClass(student.getStudentClass());
-                    response.setStudentSection(student.getStudentSection());
-                    response.setMessage("SUCCESS");
-                    responseList.add(response) ;
+                    response = "Student record inserted" ;
                 } 
             }
-            return responseList ;
+            return response ;
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
-            response.setMessage("Failed to create student");
-            responseList.add(response) ;
-            return responseList ;
+            response = e.getMessage() ;
+            return response ;
+           
         }
+       
         
     }
     
