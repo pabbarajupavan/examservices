@@ -8,11 +8,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "students_table")
+@Table(name = "students_table",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"roll_number"})})
 public class Student {
 
     @Id
