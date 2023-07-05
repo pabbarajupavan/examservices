@@ -4,8 +4,12 @@ import java.io.FileNotFoundException;
 
 
 
+
+
 public interface FileUplaodService {
 
-    public String readDataFromFileAndSaveToDB(String filePath,String userName) throws FileNotFoundException ;
+    public String readDataFromFileAndSaveToDB(String filePath,String userName) throws FileNotFoundException;
+
+    
     
 }

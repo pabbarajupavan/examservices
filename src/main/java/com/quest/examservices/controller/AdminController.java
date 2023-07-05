@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.quest.examservices.pojo.ExamCreationRequest;
 import com.quest.examservices.pojo.StudentAccessRequests;
+import com.quest.examservices.service.ExamService;
 import com.quest.examservices.service.FileUplaodService;
+import com.quest.examservices.service.QuestionService;
 import com.quest.examservices.service.StudentService;
 
 
@@ -34,6 +36,12 @@ public class AdminController {
 
     @Autowired
     private FileUplaodService fileUplaodService ;
+
+    @Autowired
+    private ExamService examService ;
+
+    @Autowired
+    private QuestionService questionService ;
 
     String response = null;
     
@@ -58,12 +66,7 @@ public class AdminController {
                if (!fileName.isBlank() && fileName.length() > 0 && fileName.contains("students")) {
                 response = fileUplaodService.readDataFromFileAndSaveToDB(filePath,userName) ;
                 return response;
-               } else{
-                response = "The file name doesn't contain students";
-                return response;
-               }
-               
-                
+               } 
             } catch (Exception e) {
                 // TODO: handle exception
                 e.printStackTrace();
@@ -83,5 +86,41 @@ public class AdminController {
         return path.toAbsolutePath().toString() ;
         
     }
+
+
+    /**
+     * rest call to create exam
+     * exam request
+     */
+    @RequestMapping(value="/createExam", method=RequestMethod.POST)
+    public String createExam(@RequestBody ExamCreationRequest examRequest) {
+        response = examService.saveExam(examRequest) ;
+        return response;
+    }
+
+    @RequestMapping(value="/uploadQuestions", method=RequestMethod.POST)
+    public String requestMethodName(@RequestParam("file") MultipartFile file,@RequestParam("examCode") String examCode, @RequestParam("userName") String userName) {
+        
+        if (!file.isEmpty()) {
+            try {
+               //to save the upload file locally 
+               String filePath = saveFileLocally(file) ;
+               //if file name contains students
+               
+               questionService.readQuestionsFromFileAndSaveToDB(filePath, userName, examCode) ;
+               return "";
+                
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+                response = e.getMessage() ;
+                return response ;
+            }
+        } else{
+            response = "File is empty";
+        }
+        return response;
+    }
+    
     
 }

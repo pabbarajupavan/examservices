@@ -9,12 +9,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.quest.examservices.model.Student;
+//import com.quest.examservices.model.Teacher;
 
 import com.quest.examservices.repository.StudentRepository;
+import com.quest.examservices.repository.TeacherRepository;
 import com.quest.examservices.service.FileUplaodService;
 
 
@@ -25,6 +28,9 @@ public class FileUploadServiceImpl implements FileUplaodService{
     @Autowired
     private StudentRepository studentRepository ;
 
+    @Autowired
+    private TeacherRepository teacherRepository ;
+
     @Override
     public String readDataFromFileAndSaveToDB(String filePath, String userName)  {
         // TODO Auto-generated method stub
@@ -32,7 +38,8 @@ public class FileUploadServiceImpl implements FileUplaodService{
         
         long creationTime = System.currentTimeMillis() ;
         Timestamp creTimestamp = new Timestamp(creationTime) ;
-       try (Stream<String> lines = new BufferedReader(new FileReader(filePath)).lines()){
+        
+        try (Stream<String> lines = new BufferedReader(new FileReader(filePath)).lines()){
             List<Student> studentList = lines
                 .skip(1) //skips the header line
                 .map(line -> line.split(","))
@@ -74,5 +81,7 @@ public class FileUploadServiceImpl implements FileUplaodService{
        } 
         
     }
+
+    
     
 }
