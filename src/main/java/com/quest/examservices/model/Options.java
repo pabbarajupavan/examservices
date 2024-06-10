@@ -23,4 +23,6 @@ public class Options {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
+    private String answerKey ;
 }
