@@ -7,10 +7,9 @@ import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,14 +20,14 @@ import com.quest.examservices.service.FileUplaodService;
 import com.quest.examservices.service.QuestionService;
 import com.quest.examservices.service.StudentService;
 
-
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-
 @RequestMapping("/api/admin")
 @RestController
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -45,7 +44,7 @@ public class AdminController {
 
     String response = null;
     
-    @RequestMapping(value = "/addStudents", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/addStudents",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addStudents(@RequestBody StudentAccessRequests studentAccessRequest){
 
         response = studentService.saveStudent(studentAccessRequest) ;
@@ -53,7 +52,7 @@ public class AdminController {
     }
 
     //file upload endpoint
-    @RequestMapping(value="/uploadFile", method=RequestMethod.POST)
+    @PostMapping("/uploadFile")
     public String fileUpload(@RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName, @RequestParam("userName") String userName) {
 
         
@@ -92,15 +91,15 @@ public class AdminController {
      * rest call to create exam
      * exam request
      */
-    @RequestMapping(value="/createExam", method=RequestMethod.POST)
+    @PostMapping("/createExam")
     public String createExam(@RequestBody ExamCreationRequest examRequest) {
         response = examService.saveExam(examRequest) ;
         return response;
     }
 
-    @RequestMapping(value="/uploadQuestions", method=RequestMethod.POST)
-    public String requestMethodName(@RequestParam("file") MultipartFile file,@RequestParam("examCode") String examCode, @RequestParam("userName") String userName) {
-        
+    @PostMapping("/uploadQuestions")
+    public String updloadQuestionsFromFile(@RequestParam("file") MultipartFile file,@RequestParam("examCode") String examCode, @RequestParam("userName") String userName) {
+        log.info("inside upload questions method" ) ;
         if (!file.isEmpty()) {
             try {
                //to save the upload file locally 
