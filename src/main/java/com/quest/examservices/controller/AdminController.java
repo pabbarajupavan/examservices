@@ -46,7 +46,7 @@ public class AdminController {
     
     @PostMapping(value = "/addStudents",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addStudents(@RequestBody StudentAccessRequests studentAccessRequest){
-
+    	log.info("Admin Controller --> add students");
         response = studentService.saveStudent(studentAccessRequest) ;
         return response ;
     }
